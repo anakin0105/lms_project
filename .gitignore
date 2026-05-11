@@ -1,0 +1,27 @@
+
+
+db.sqlite3
+media/
+# PyCharm / IDE
+.idea/
+*.iml
+
+# Virtual environments
+venv/
+env/
+.venv/
+.env
+
+# Python bytecode
+__pycache__/
+*.py[cod]
+*.pyc
+*.pyo
+*.pyd
+
+# Django
+*.log
+*.pot
+*.sqlite3
+media/
+staticfiles/
