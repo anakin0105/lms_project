@@ -140,3 +140,5 @@ REST_FRAMEWORK = {
         'rest_framework.renderers.JSONRenderer',
     ],
 }
+# ===================== CUSTOM USER =====================
+AUTH_USER_MODEL = 'users.User'
