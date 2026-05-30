@@ -46,6 +46,7 @@ INSTALLED_APPS = [
     'rest_framework',           # Django REST Framework
     'users',                    # ← наше приложение пользователей
     'lms',  # ← приложение для курсов и уроков
+    'django_filters',  # ← приложение фильтрации
 ]
 
 # ===================== CUSTOM USER =====================
