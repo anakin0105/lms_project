@@ -2,11 +2,14 @@ from django.shortcuts import render
 
 # Create your views here.
 from rest_framework import viewsets, generics
+from rest_framework.permissions import IsAuthenticated
+
 from .models import Course, Lesson
+from .permissions import IsModer, IsOwner
 from .serializers import CourseSerializer, LessonSerializer
 from rest_framework import generics
-from users.models import User
-from .serializers import UserProfileSerializer
+from users.serializers import UserProfileSerializer
+
 from rest_framework import viewsets, filters
 from django_filters.rest_framework import DjangoFilterBackend
 
@@ -17,22 +20,53 @@ class CourseViewSet(viewsets.ModelViewSet):
     queryset = Course.objects.all()
     serializer_class = CourseSerializer
 
+    def perform_create(self, serializer):
+        serializer.save(owner=self.request.user)
+
+    def get_permissions(self):
+        if self.action in ['create', 'destroy']:
+            return [IsAuthenticated(), IsOwner()]
+        # Для update, list, retrieve — модератор или владелец
+        return [IsAuthenticated(), IsModer | IsOwner]
 
 # Generic Views для Уроков (CRUD)
 class LessonListCreateAPIView(generics.ListCreateAPIView):
     queryset = Lesson.objects.all()
     serializer_class = LessonSerializer
+    permission_classes = (IsAuthenticated,)
 
 
-class LessonRetrieveUpdateDestroyAPIView(generics.RetrieveUpdateDestroyAPIView):
+    def perform_create(self, serializer):
+        serializer.save(owner=self.request.user)
+
+    def get_permissions(self):
+        if self.request.method == 'POST':           # create
+            return [IsAuthenticated(), IsOwner()]  # только владелец (немодератор)
+        return [IsAuthenticated(), IsModer | IsOwner]  # list — модератор или владелец
+
+
+# Только просмотр (GET)
+class LessonListAPIView(generics.ListAPIView):
     queryset = Lesson.objects.all()
     serializer_class = LessonSerializer
 
-# Дополнительное задание — Редактирование профиля пользователя
-class UserProfileUpdateAPIView(generics.RetrieveUpdateAPIView):
-    queryset = User.objects.all()
-    serializer_class = UserProfileSerializer
-    lookup_field = 'id'   # можно будет обращаться по /api/users/5/
+
+# Просмотр одного урока (GET)
+class LessonDetailAPIView(generics.RetrieveAPIView):
+    queryset = Lesson.objects.all()
+    serializer_class = LessonSerializer
+    permission_classes = [IsAuthenticated, IsModer | IsOwner]
+
+# Обновление урока (PUT/PATCH) — тут нужен модератор
+class LessonUpdateAPIView(generics.UpdateAPIView):
+    queryset = Lesson.objects.all()
+    serializer_class = LessonSerializer
+    permission_classes = [IsAuthenticated, IsModer | IsOwner]
+
+# Удаление урока (DELETE) — запрещаем модератору
+class LessonDestroyAPIView(generics.DestroyAPIView):
+    queryset = Lesson.objects.all()
+    permission_classes = [IsAuthenticated, IsOwner]   # ← модератор НЕ должен удалять!
 
 
 class PaymentViewSet(viewsets.ReadOnlyModelViewSet):

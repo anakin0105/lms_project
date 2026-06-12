@@ -36,7 +36,12 @@ class Lesson(models.Model):
         related_name='lessons',
         verbose_name="Курс"
     )
-
+    owner = models.ForeignKey(
+        User,
+        on_delete=models.CASCADE,
+        related_name='lessons',
+        verbose_name="Владелец"
+    )
     title = models.CharField(max_length=200, verbose_name="Название урока")
     description = models.TextField(verbose_name="Описание урока")
     preview = models.ImageField(upload_to='lesson_previews/', blank=True, null=True, verbose_name="Превью")
