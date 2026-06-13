@@ -33,15 +33,5 @@ class CourseSerializer(serializers.ModelSerializer):
         """Возвращает количество уроков в курсе"""
         return obj.lessons.count()
 
-class UserProfileSerializer(serializers.ModelSerializer):
-    payments = PaymentSerializer(many=True, read_only=True)  # история платежей
-
-    class Meta:
-        model = User
-        fields = [
-            'id', 'email', 'username', 'phone', 'city', 'avatar',
-            'first_name', 'last_name', 'payments'
-        ]
-        read_only_fields = ['email']
 
 
