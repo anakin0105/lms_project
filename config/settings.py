@@ -44,7 +44,9 @@ INSTALLED_APPS = [
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
-    'django.contrib.staticfiles',
+    'django.contrib.staticfiles', # опционально для swagger UI
+    'drf_spectacular',
+    'drf_spectacular_sidecar',
     'rest_framework',           # Django REST Framework
     'users',                    # ← наше приложение пользователей
     'lms',  # ← приложение для курсов и уроков
@@ -146,10 +148,20 @@ REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': [
         'rest_framework_simplejwt.authentication.JWTAuthentication'],
     'DEFAULT_PERMISSION_CLASSES': [
-        'rest_framework.permissions.IsAuthenticated',
-    ],
+        'rest_framework.permissions.IsAuthenticated'],
+    'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
 }
 SIMPLE_JWT = {
     "ACCESS_TOKEN_LIFETIME": timedelta(minutes=5),
     "REFRESH_TOKEN_LIFETIME": timedelta(days=1),
 }
+
+SPECTACULAR_SETTINGS = {
+    'TITLE': 'LMS API',
+    'DESCRIPTION': 'Обучающая платформа с курсами и платежами',
+    'VERSION': '1.0.0',
+    'SERVE_INCLUDE_SCHEMA': False,
+    'SWAGGER_UI_DIST': 'SIDECAR',  # красивый UI
+    'SWAGGER_UI_FAVICON_HREF': 'SIDECAR',
+}
+STRIPE_API_KEY = os.getenv("STRIPE_API_KEY")
