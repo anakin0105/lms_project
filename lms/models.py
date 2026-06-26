@@ -58,7 +58,6 @@ class Lesson(models.Model):
     def __str__(self):
         return f"{self.course.title} - {self.title}"
 
-
 class Subscription(models.Model):
     user = models.ForeignKey(
         User,
@@ -82,3 +81,6 @@ class Subscription(models.Model):
 
     def __str__(self):
         return f"{self.user.email} → {self.course.title}"
+
+
+

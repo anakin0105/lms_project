@@ -24,7 +24,7 @@ class User(AbstractUser):
 
 class Payment(models.Model):
     user = models.ForeignKey(
-        User,
+        'users.User',
         on_delete=models.CASCADE,
         related_name='payments',
         verbose_name="Пользователь"
@@ -71,10 +71,27 @@ class Payment(models.Model):
         verbose_name="Способ оплаты"
     )
 
+    # Поля для Stripe
+    stripe_product_id = models.CharField(max_length=255, blank=True, null=True)
+    stripe_price_id = models.CharField(max_length=255, blank=True, null=True)
+    stripe_session_id = models.CharField(max_length=255, blank=True, null=True)
+    payment_link = models.URLField(max_length=500, blank=True, null=True)
+    status = models.CharField(
+        max_length=20,
+        choices=[
+            ('pending', 'Ожидает оплаты'),
+            ('paid', 'Оплачено'),
+            ('failed', 'Ошибка'),
+            ('canceled', 'Отменено')
+        ],
+        default='pending',
+        verbose_name="Статус"
+    )
+
     class Meta:
         verbose_name = "Платеж"
         verbose_name_plural = "Платежи"
         ordering = ['-payment_date']
 
     def __str__(self):
-        return f"Платеж {self.user.email} - {self.amount} ({self.payment_method})"
+        return f"Платеж {self.user.email} - {self.amount}"

@@ -35,17 +35,22 @@ class CourseSerializer(serializers.ModelSerializer):
             'id', 'title', 'preview', 'description', 'owner',
             'created_at', 'updated_at', 'lessons_count', 'lessons', 'is_subscribed'
         ]
-
+        read_only_fields = ['owner', 'created_at', 'updated_at']
 
 
     # noinspection PyMethodMayBeStatic
-    def get_lessons_count(self, obj):
+    def get_lessons_count(self, obj) -> int:
         """Возвращает количество уроков в курсе"""
         return obj.lessons.count()
 
-    def get_is_subscribed(self, obj):
+    def get_is_subscribed(self, obj) -> bool:
+        """Проверяет, подписан ли текущий пользователь на курс"""
         request = self.context.get('request')
         if not request or not request.user.is_authenticated:
             return False
         return obj.subscriptions.filter(user=request.user).exists()
 
+class PaymentCreateSerializer(serializers.Serializer):
+    """Схема для запроса на создание платежа"""
+    course_id = serializers.IntegerField(help_text="ID курса для оплаты")
+    # lesson_id = serializers.IntegerField(required=False, help_text="ID урока (опционально)")
