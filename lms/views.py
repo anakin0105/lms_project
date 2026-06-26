@@ -24,7 +24,7 @@ from .serializers import PaymentSerializer
 from drf_spectacular.utils import extend_schema, OpenApiParameter
 from drf_spectacular.utils import extend_schema, extend_schema_view, OpenApiParameter, OpenApiResponse
 from drf_spectacular.types import OpenApiTypes
-
+from .tasks import send_course_update_notification
 from .services import PaymentService
 # ====================== СОЗДАНИЕ ПЛАТЕЖА (Stripe) ======================
 from .services import PaymentService   # ← добавь этот импорт
@@ -47,6 +47,12 @@ class CourseViewSet(viewsets.ModelViewSet):
 
     def perform_create(self, serializer):
         serializer.save(owner=self.request.user)
+
+    def perform_update(self, serializer):
+        """При обновлении курса — отправляем уведомление подписчикам"""
+        course = serializer.save()                    # сохраняем изменения
+        send_course_update_notification.delay(course.id)  # запускаем Celery
+        return course
 
     def get_permissions(self):
         if self.action in ['create', 'destroy']:
@@ -95,10 +101,18 @@ class LessonDetailAPIView(generics.RetrieveAPIView):
     patch=extend_schema(summary="Обновить урок", tags=["Уроки"]),
     put=extend_schema(summary="Обновить урок (полностью)", tags=["Уроки"])
 )
+
 class LessonUpdateAPIView(generics.UpdateAPIView):
     queryset = Lesson.objects.all()
     serializer_class = LessonSerializer
     permission_classes = [IsAuthenticated, IsModerOrOwner]
+
+    def perform_update(self, serializer):
+        """При обновлении урока обновляем курс и отправляем уведомление"""
+        lesson = serializer.save()
+        lesson.course.save()  # обновляем updated_at курса
+        send_course_update_notification.delay(lesson.course.id)
+        return lesson
 
 
 @extend_schema_view(delete=extend_schema(summary="Удалить урок (только владелец)", tags=["Уроки"]))

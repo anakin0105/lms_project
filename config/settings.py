@@ -51,6 +51,8 @@ INSTALLED_APPS = [
     'users',                    # ← наше приложение пользователей
     'lms',  # ← приложение для курсов и уроков
     'django_filters',  # ← приложение фильтрации
+    'django_celery_beat',
+    'django_celery_results',
 ]
 
 # ===================== CUSTOM USER =====================
@@ -165,3 +167,24 @@ SPECTACULAR_SETTINGS = {
     'SWAGGER_UI_FAVICON_HREF': 'SIDECAR',
 }
 STRIPE_API_KEY = os.getenv("STRIPE_API_KEY")
+
+# ===================== CELERY =====================
+CELERY_BROKER_URL = os.getenv("CELERY_BROKER_URL", "redis://127.0.0.1:6379/0")
+CELERY_RESULT_BACKEND = os.getenv("CELERY_RESULT_BACKEND", "redis://127.0.0.1:6379/0")
+
+CELERY_ACCEPT_CONTENT = ['json']
+CELERY_TASK_SERIALIZER = 'json'
+CELERY_RESULT_SERIALIZER = 'json'
+CELERY_TIMEZONE = TIME_ZONE  # важно, чтобы совпадало с Django
+CELERY_BEAT_SCHEDULER = 'django_celery_beat.schedulers:DatabaseScheduler'
+
+# ===================== EMAIL SETTINGS =====================
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'   # Для разработки — письма выводятся в консоль
+# EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'   # Для реальной отправки
+
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+EMAIL_HOST_USER = os.getenv('EMAIL_HOST_USER')
+EMAIL_HOST_PASSWORD = os.getenv('EMAIL_HOST_PASSWORD')
+DEFAULT_FROM_EMAIL = os.getenv('NOTIFICATION_EMAIL', EMAIL_HOST_USER)
