@@ -17,7 +17,7 @@ from dotenv import load_dotenv
 from pathlib import Path
 from django.conf import settings
 from django.conf.urls.static import static
-load_dotenv(override=True)
+load_dotenv()
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -169,8 +169,15 @@ SPECTACULAR_SETTINGS = {
 STRIPE_API_KEY = os.getenv("STRIPE_API_KEY")
 
 # ===================== CELERY =====================
-CELERY_BROKER_URL = os.getenv("CELERY_BROKER_URL", "redis://127.0.0.1:6379/0")
-CELERY_RESULT_BACKEND = os.getenv("CELERY_RESULT_BACKEND", "redis://127.0.0.1:6379/0")
+CELERY_BROKER_URL = os.getenv(
+    "CELERY_BROKER_URL",
+    "redis://redis:6379/0"
+)
+
+CELERY_RESULT_BACKEND = os.getenv(
+    "CELERY_RESULT_BACKEND",
+    "redis://redis:6379/0"
+)
 
 CELERY_ACCEPT_CONTENT = ['json']
 CELERY_TASK_SERIALIZER = 'json'
@@ -188,3 +195,4 @@ EMAIL_USE_TLS = True
 EMAIL_HOST_USER = os.getenv('EMAIL_HOST_USER')
 EMAIL_HOST_PASSWORD = os.getenv('EMAIL_HOST_PASSWORD')
 DEFAULT_FROM_EMAIL = os.getenv('NOTIFICATION_EMAIL', EMAIL_HOST_USER)
+DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
