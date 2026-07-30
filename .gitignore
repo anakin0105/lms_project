@@ -1,23 +1,19 @@
-# Byte-compiled / cache
 __pycache__/
 *.py[cod]
 *$py.class
 *.so
 
-# Virtual environments
 venv/
 env/
 .venv/
 ENV/
 
-# Environment & secrets — НИКОГДА не коммитить
 .env
 .env.local
 .env.docker
 *.env
 !.env.example
 
-# Django
 *.log
 *.pot
 db.sqlite3
@@ -25,32 +21,25 @@ media/
 staticfiles/
 static/
 
-# IDE
 .idea/
 .vscode/
 *.iml
 *.swp
 *.swo
 
-# Docker volumes
 postgres_data/
 redis_data/
 
-# Coverage / tests
 htmlcov/
 .coverage
 .coverage.*
 coverage.xml
 *.cover
 .pytest_cache/
-.tox/
-.nox/
 
-# OS
 .DS_Store
 Thumbs.db
 
-# Distribution
 dist/
 build/
 *.egg-info/
