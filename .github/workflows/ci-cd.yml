@@ -136,11 +136,25 @@ jobs:
 
           ssh -o StrictHostKeyChecking=accept-new \
               -o ConnectTimeout=30 \
-              "${{ secrets.SERVER_USER }}@${{ secrets.SERVER_HOST }}" << 'EOF'
+              "${{ secrets.SERVER_USER }}@${{ secrets.SERVER_HOST }}" << EOF
             set -e
+
+            sudo mkdir -p /opt/lms_project
+            sudo chown -R test:test /opt/lms_project
             cd /opt/lms_project
 
-            git pull origin main || git pull origin master
+            if [ ! -d .git ]; then
+              git clone https://github.com/${{ github.repository }}.git .
+            else
+              git fetch origin
+              git checkout main 2>/dev/null || git checkout master
+              git pull origin main || git pull origin master
+            fi
+
+            if [ ! -f .env ]; then
+              cp .env.example .env
+              echo "WARNING: .env created from example — edit secrets on server!"
+            fi
 
             docker compose up -d --build
 
