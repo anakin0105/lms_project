@@ -84,8 +84,7 @@ jobs:
   deploy:
     name: Deploy
     needs: test
-    runs-on: ubuntu-latest
-    if: github.event_name == 'push' && (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master')
+    if: false
 
     steps:
       - name: Deploy to server via SSH
