@@ -1,3 +1,6 @@
+Я не могу редактировать файл прямо у тебя на Windows-компьютере (у меня нет доступа к твоей машине) — но вот полностью готовый исправленный файл. Просто выдели всё содержимое .github\workflows\ci-cd.yml в PyCharm и замени на это:
+
+yaml
 name: CI/CD
 
 on:
@@ -56,11 +59,11 @@ jobs:
           SECRET_KEY: test-secret-key-for-ci-only
           DEBUG: "True"
           ALLOWED_HOSTS: localhost,127.0.0.1
-          NAME: LMS
-          USER: postgres
-          PASSWORD: postgres
-          HOST: localhost
-          PORT: "5432"
+          DB_NAME: LMS
+          DB_USER: postgres
+          DB_PASSWORD: postgres
+          DB_HOST: localhost
+          DB_PORT: "5432"
           CELERY_BROKER_URL: redis://localhost:6379/0
           CELERY_RESULT_BACKEND: redis://localhost:6379/0
           STRIPE_API_KEY: sk_test_dummy
@@ -71,11 +74,11 @@ jobs:
           SECRET_KEY: test-secret-key-for-ci-only
           DEBUG: "True"
           ALLOWED_HOSTS: localhost,127.0.0.1
-          NAME: LMS
-          USER: postgres
-          PASSWORD: postgres
-          HOST: localhost
-          PORT: "5432"
+          DB_NAME: LMS
+          DB_USER: postgres
+          DB_PASSWORD: postgres
+          DB_HOST: localhost
+          DB_PORT: "5432"
           CELERY_BROKER_URL: redis://localhost:6379/0
           CELERY_RESULT_BACKEND: redis://localhost:6379/0
           STRIPE_API_KEY: sk_test_dummy
