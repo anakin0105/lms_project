@@ -84,8 +84,8 @@ jobs:
   deploy:
     name: Deploy
     needs: test
+    runs-on: ubuntu-latest
     if: false
-
     steps:
       - name: Deploy to server via SSH
         uses: appleboy/ssh-action@v1.2.0
