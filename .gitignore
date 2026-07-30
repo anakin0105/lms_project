@@ -11,7 +11,7 @@ venv/
 env/
 .venv/
 .env
-
+.env.docker
 # Python bytecode
 __pycache__/
 *.py[cod]
@@ -25,3 +25,8 @@ __pycache__/
 *.sqlite3
 media/
 staticfiles/
+# Docker
+docker-compose.override.yml
+*.log
+postgres_data/
+redis_data/
