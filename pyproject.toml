@@ -22,7 +22,8 @@ dependencies = [
     "stripe (>=11.0)",
     "forex-python (>=1.8)",
     "pillow (>=10.0)",
-    "djangorestframework-simplejwt (>=5.5.1,<6.0.0)"
+    "djangorestframework-simplejwt (>=5.5.1,<6.0.0)",
+    "gunicorn (>=23.0)",
 ]
 
 
