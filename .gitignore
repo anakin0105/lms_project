@@ -1,32 +1,58 @@
-
-
-db.sqlite3
-media/
-# PyCharm / IDE
-.idea/
-*.iml
+# Byte-compiled / cache
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
 
 # Virtual environments
 venv/
 env/
 .venv/
+ENV/
+
+# Environment & secrets
 .env
+.env.local
 .env.docker
-# Python bytecode
-__pycache__/
-*.py[cod]
-*.pyc
-*.pyo
-*.pyd
+*.env
 
 # Django
 *.log
 *.pot
-*.sqlite3
+db.sqlite3
 media/
 staticfiles/
-# Docker
-docker-compose.override.yml
-*.log
+static/
+
+# IDE
+.idea/
+.vscode/
+*.iml
+*.swp
+*.swo
+
+# Poetry
+# poetry.lock  # обычно коммитим
+
+# Docker volumes
 postgres_data/
 redis_data/
+
+# Coverage / tests
+htmlcov/
+.coverage
+.coverage.*
+coverage.xml
+*.cover
+.pytest_cache/
+.tox/
+.nox/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Distribution
+dist/
+build/
+*.egg-info/
